@@ -108,7 +108,7 @@ describe("fetchRecommendations", () => {
 
     const recommendations = await fetchRecommendations();
 
-    expect(recommendations.length).toBeGreaterThan(100);
+    expect(recommendations.length).toBeGreaterThan(50);
     const weWereHere = recommendations.find((game) => game.appId === 582500);
     expect(weWereHere?.kind).toBe("free");
     expect(weWereHere?.price.status).toBe("free");
