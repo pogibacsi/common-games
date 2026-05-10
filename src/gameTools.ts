@@ -22,12 +22,22 @@ export function isFreeGame(game: ComparedGame): boolean {
 export function filterRecommendationCandidates(
   recommendations: RecommendationGame[],
   kind: RecommendationKind,
-  result: CompareResult | null
+  result: CompareResult | null,
+  maxPriceCents?: number | null
 ): RecommendationGame[] {
   const ownedByEveryone = new Set(
     result?.allGames.filter((game) => game.owners.length === result.users.length).map((game) => game.appId) ?? []
   );
-  return recommendations.filter((game) => game.kind === kind && !ownedByEveryone.has(game.appId));
+  return recommendations.filter((game) => {
+    if (game.kind !== kind) return false;
+    if (ownedByEveryone.has(game.appId)) return false;
+    if (kind === "paid" && maxPriceCents != null) {
+      if (game.price.status !== "paid") return false;
+      if (typeof game.price.final !== "number") return false;
+      if (game.price.final > maxPriceCents) return false;
+    }
+    return true;
+  });
 }
 
 export function pickRandom<T>(items: T[], random = Math.random): T | null {

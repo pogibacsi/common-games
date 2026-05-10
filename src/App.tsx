@@ -80,6 +80,7 @@ function App() {
   const [freeRecommendation, setFreeRecommendation] = useState<RecommendationGame | null>(null);
   const [paidRecommendation, setPaidRecommendation] = useState<RecommendationGame | null>(null);
   const [recommendationKind, setRecommendationKind] = useState<"free" | "paid">("free");
+  const [maxPaidPriceCents, setMaxPaidPriceCents] = useState<number | null>(null);
   const [recommendationReelItems, setRecommendationReelItems] = useState<RecommendationGame[]>([]);
   const [recommendationReelOffset, setRecommendationReelOffset] = useState(0);
   const [recommendationReelIndex, setRecommendationReelIndex] = useState(0);
@@ -184,8 +185,8 @@ function App() {
     [recommendations, result]
   );
   const paidRecommendationCandidates = useMemo(
-    () => filterRecommendationCandidates(recommendations, "paid", result),
-    [recommendations, result]
+    () => filterRecommendationCandidates(recommendations, "paid", result, maxPaidPriceCents),
+    [recommendations, result, maxPaidPriceCents]
   );
   const activeRecommendationCandidates = recommendationKind === "free" ? freeRecommendationCandidates : paidRecommendationCandidates;
 
@@ -539,7 +540,9 @@ function App() {
           durationMs={recommendationDurationMs}
           isSpinning={isRecommendationReelSpinning}
           selectedGame={selectedRecommendation}
+          maxPaidPriceCents={maxPaidPriceCents}
           onKindChange={setRecommendationKind}
+          onMaxPaidPriceChange={setMaxPaidPriceCents}
           onSpin={spinRecommendationReel}
         />
       </ToolDialog>
@@ -564,6 +567,9 @@ function App() {
           <div className="tool-empty">Compare at least two Steam users before using the random selector.</div>
         )}
       </ToolDialog>
+      <footer className="app-credit" aria-label="Credit">
+        Made by Barnabas Polgar
+      </footer>
     </main>
   );
 }
@@ -793,6 +799,14 @@ function ToolDialog({
   );
 }
 
+const MAX_PRICE_OPTIONS: Array<{ label: string; value: number | null }> = [
+  { label: "≤ €5", value: 500 },
+  { label: "≤ €10", value: 1000 },
+  { label: "≤ €20", value: 2000 },
+  { label: "≤ €40", value: 4000 },
+  { label: "Any", value: null }
+];
+
 function RecommendationPanel({
   isLoading,
   error,
@@ -808,7 +822,9 @@ function RecommendationPanel({
   durationMs,
   isSpinning,
   selectedGame,
+  maxPaidPriceCents,
   onKindChange,
+  onMaxPaidPriceChange,
   onSpin
 }: {
   isLoading: boolean;
@@ -825,7 +841,9 @@ function RecommendationPanel({
   durationMs: number;
   isSpinning: boolean;
   selectedGame: RecommendationGame | null;
+  maxPaidPriceCents: number | null;
   onKindChange: (kind: "free" | "paid") => void;
+  onMaxPaidPriceChange: (value: number | null) => void;
   onSpin: (stageWidth: number) => void;
 }) {
   const [showAll, setShowAll] = useState(false);
@@ -867,6 +885,22 @@ function RecommendationPanel({
               Paid
             </button>
           </div>
+          {recommendationKind === "paid" && !showAll ? (
+            <div className="max-price-filter" role="group" aria-label="Max price filter">
+              <span className="max-price-label">Max price</span>
+              <div className="segmented-control max-price-options">
+                {MAX_PRICE_OPTIONS.map((option) => (
+                  <button
+                    key={option.label}
+                    className={maxPaidPriceCents === option.value ? "active" : ""}
+                    onClick={() => onMaxPaidPriceChange(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : null}
           {showAll ? (
             <RecommendationsList candidates={activeCandidates} onBack={() => setShowAll(false)} />
           ) : (

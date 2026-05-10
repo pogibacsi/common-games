@@ -731,6 +731,51 @@ select {
   border-bottom: 1px solid var(--line);
 }
 
+.max-price-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+.max-price-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.segmented-control.max-price-options {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, oklch(18% 0.016 105), oklch(12% 0.014 105)),
+    var(--panel);
+  border-radius: 8px;
+}
+
+.segmented-control.max-price-options button {
+  min-height: 30px;
+  font-size: 0.82rem;
+  padding: 0 6px;
+  border-radius: 6px;
+}
+
+.app-credit {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+  font-family: "Courier New", "Cascadia Code", ui-monospace, monospace;
+  grid-column: 1 / -1;
+}
+
 .ghost-button {
   background: none;
   border: none;
