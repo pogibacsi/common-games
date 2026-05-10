@@ -13,7 +13,7 @@ import type {
 const STEAM_API_BASE = "https://api.steampowered.com";
 const STORE_API_BASE = "https://store.steampowered.com/api/appdetails";
 const REQUEST_TIMEOUT_MS = 12000;
-const MAX_STORE_CHECKS = 1200;
+const MAX_STORE_CHECKS = 400;
 const STORE_PRICE_COUNTRY = "de";
 const STORE_PRICE_COUNTRY_CODE = "DE";
 const RECOMMENDATION_CACHE_TTL_MS = 60 * 60 * 1000;
