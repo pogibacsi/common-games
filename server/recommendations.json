@@ -16,7 +16,15 @@
     { "appId": 265630, "name": "Fistful of Frags" },
     { "appId": 2084050, "name": "Unsolved Case" },
     { "appId": 1453490, "name": "Deducto" },
-    { "appId": 1568540, "name": "Smithworks" }
+    { "appId": 1568540, "name": "Smithworks" },
+    { "appId": 563560, "name": "Alien Swarm: Reactive Drop" },
+    { "appId": 408900, "name": "Unfortunate Spacemen" },
+    { "appId": 700330, "name": "SCP: Secret Laboratory" },
+    { "appId": 1097150, "name": "Fall Guys" },
+    { "appId": 1677740, "name": "Stumble Guys" },
+    { "appId": 1625450, "name": "Muck" },
+    { "appId": 382490, "name": "Relic Hunters Zero: Remix" },
+    { "appId": 791470, "name": "DYO" }
   ],
   "paid": [
     { "appId": 1966720, "name": "Lethal Company" },
