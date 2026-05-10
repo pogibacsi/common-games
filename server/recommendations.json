@@ -25,7 +25,17 @@
     { "appId": 1625450, "name": "Muck" },
     { "appId": 382490, "name": "Relic Hunters Zero: Remix" },
     { "appId": 791470, "name": "DYO" },
-    { "appId": 3376480, "name": "Delivery & Beyond" }
+    { "appId": 3376480, "name": "Delivery & Beyond" },
+    { "appId": 1233410, "name": "MicroWorks" },
+    { "appId": 2971900, "name": "Welcome to Dustown" },
+    { "appId": 1911390, "name": "Knightfall: A Daring Journey" },
+    { "appId": 2422870, "name": "Bronzebeard's Tavern" },
+    { "appId": 750470, "name": "War Brokers" },
+    { "appId": 1537830, "name": "Disney Speedstorm" },
+    { "appId": 3664010, "name": "Drift Legends 2" },
+    { "appId": 2073850, "name": "THE FINALS" },
+    { "appId": 872200, "name": "Rogue Company" },
+    { "appId": 307950, "name": "Caliber" }
   ],
   "paid": [
     { "appId": 1966720, "name": "Lethal Company" },
@@ -91,6 +101,7 @@
     { "appId": 552100, "name": "Brick Rigs" },
     { "appId": 1167630, "name": "Teardown" },
     { "appId": 976730, "name": "Halo: The Master Chief Collection" },
-    { "appId": 1551360, "name": "Forza Horizon 5" }
+    { "appId": 1551360, "name": "Forza Horizon 5" },
+    { "appId": 1515640, "name": "Arcadegeddon" }
   ]
 }
