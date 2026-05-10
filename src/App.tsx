@@ -282,14 +282,14 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!freeRecommendation || !freeRecommendationCandidates.some((game) => game.appId === freeRecommendation.appId)) {
-      setFreeRecommendation(pickRandom(freeRecommendationCandidates));
+    if (freeRecommendation && !freeRecommendationCandidates.some((game) => game.appId === freeRecommendation.appId)) {
+      setFreeRecommendation(null);
     }
   }, [freeRecommendation, freeRecommendationCandidates]);
 
   useEffect(() => {
-    if (!paidRecommendation || !paidRecommendationCandidates.some((game) => game.appId === paidRecommendation.appId)) {
-      setPaidRecommendation(pickRandom(paidRecommendationCandidates));
+    if (paidRecommendation && !paidRecommendationCandidates.some((game) => game.appId === paidRecommendation.appId)) {
+      setPaidRecommendation(null);
     }
   }, [paidRecommendation, paidRecommendationCandidates]);
 
@@ -828,7 +828,21 @@ function RecommendationPanel({
   onKindChange: (kind: "free" | "paid") => void;
   onSpin: (stageWidth: number) => void;
 }) {
+  const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    setShowAll(false);
+  }, [recommendationKind]);
+
   const displayedPick = selectedGame?.kind === recommendationKind ? selectedGame : recommendationKind === "free" ? freeGame : paidGame;
+
+  const handleSeeAll = () => {
+    const confirmed = window.confirm(
+      "Heads up: peeking at the full list takes the fun out of rolling for a random surprise. Sure you want to spoil it?"
+    );
+    if (confirmed) setShowAll(true);
+  };
+
   return (
     <section className="tool-panel recommendation-panel in-dialog" aria-label="Steam recommendations">
       <div className="tool-heading spacious">
@@ -853,32 +867,80 @@ function RecommendationPanel({
               Paid
             </button>
           </div>
-          <div className="reel-stage" style={{ "--marker-left": `${markerPct}%` } as CSSProperties}>
-            <div className="reel-marker" aria-hidden="true" />
-            <div
-              className={isSpinning ? "game-reel spinning" : "game-reel"}
-              style={{ "--reel-offset": `${reelOffset}px`, "--reel-duration": `${durationMs}ms` } as CSSProperties}
-            >
-              {reelItems.map((game, index) => (
-                <div className="reel-card" key={`${game.appId}-${index}`}>
-                  <img src={steamHeaderImage(game.appId)} alt="" loading="lazy" />
-                  <span>{game.name}</span>
+          {showAll ? (
+            <RecommendationsList candidates={activeCandidates} onBack={() => setShowAll(false)} />
+          ) : (
+            <>
+              <div className="reel-stage" style={{ "--marker-left": `${markerPct}%` } as CSSProperties}>
+                <div className="reel-marker" aria-hidden="true" />
+                <div
+                  className={isSpinning ? "game-reel spinning" : "game-reel"}
+                  style={{ "--reel-offset": `${reelOffset}px`, "--reel-duration": `${durationMs}ms` } as CSSProperties}
+                >
+                  {reelItems.map((game, index) => (
+                    <div className="reel-card" key={`${game.appId}-${index}`}>
+                      <img src={steamHeaderImage(game.appId)} alt="" loading="lazy" />
+                      <span>{game.name}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-          <button className="primary-button" onClick={(event) => onSpin(reelStageWidth(event.currentTarget))} disabled={isSpinning || activeCandidates.length === 0}>
-            {isSpinning ? <Loader2 className="spin" size={18} aria-hidden="true" /> : <Shuffle size={18} aria-hidden="true" />}
-            Spin wildcard
-          </button>
-          <RecommendationCard
-            kind={recommendationKind}
-            game={displayedPick}
-            count={recommendationKind === "free" ? freeCount : paidCount}
-          />
+              </div>
+              <button className="primary-button" onClick={(event) => onSpin(reelStageWidth(event.currentTarget))} disabled={isSpinning || activeCandidates.length === 0}>
+                {isSpinning ? <Loader2 className="spin" size={18} aria-hidden="true" /> : <Shuffle size={18} aria-hidden="true" />}
+                Spin wildcard
+              </button>
+              <button className="ghost-button see-all-button" onClick={handleSeeAll} disabled={activeCandidates.length === 0}>
+                See all {activeCandidates.length} games
+              </button>
+              {displayedPick ? (
+                <RecommendationCard
+                  kind={recommendationKind}
+                  game={displayedPick}
+                  count={recommendationKind === "free" ? freeCount : paidCount}
+                />
+              ) : null}
+            </>
+          )}
         </div>
       )}
     </section>
+  );
+}
+
+function RecommendationsList({
+  candidates,
+  onBack
+}: {
+  candidates: RecommendationGame[];
+  onBack: () => void;
+}) {
+  return (
+    <div className="recommendation-all-list">
+      <button className="ghost-button back-button" onClick={onBack}>
+        ← Back to spin
+      </button>
+      <ul>
+        {candidates.map((game) => (
+          <li key={game.appId}>
+            <img src={steamHeaderImage(game.appId)} alt="" loading="lazy" />
+            <div className="all-list-info">
+              <strong>{game.name}</strong>
+              <p>{game.description}</p>
+              <span className={`price-pill ${game.price.status}`}>{priceInfoLabel(game.price)}</span>
+            </div>
+            <a
+              className="icon-link"
+              href={safeSteamUrl(game.steamUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open on Steam"
+            >
+              <ExternalLink size={16} aria-hidden="true" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
