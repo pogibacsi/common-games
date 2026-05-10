@@ -1,0 +1,12 @@
+node_modules/
+dist/
+dist-server/
+.env
+.env.local
+.env.*.local
+.vite/
+.vercel/
+.data/
+.claude/settings.local.json
+coverage/
+*.log
