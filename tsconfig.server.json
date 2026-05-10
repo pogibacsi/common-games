@@ -10,6 +10,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "dist-server",
+    "resolveJsonModule": true,
     "types": ["node", "express"]
   },
   "include": ["server", "shared", "api"],
